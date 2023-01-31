@@ -9,7 +9,6 @@ module.exports.createUser = async (req, res) => {
     // create a new user
     const newUser = userModel.create(req.body);
     res.json(newUser);
-    const find
   } else {
     res.json({
       msg: "User Already Exists",
