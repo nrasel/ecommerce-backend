@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/user", authRouter);
 
 app.use(notFound);
-app.request(errorHandler);
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`app running on port ${PORT}`);
 });
