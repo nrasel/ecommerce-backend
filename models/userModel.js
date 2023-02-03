@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 var userSchema = new mongoose.Schema({
   firstname: {
@@ -22,6 +23,14 @@ var userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+// The code defines a middleware function for the "save" pre-save event for a Mongoose schema. This function is executed before a document is saved to the database.
+
+// password encrypted using bcrypt
+userSchema.pre("save", async function (next) {
+  const salt = bcrypt.genSaltSync(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 //Export the model
