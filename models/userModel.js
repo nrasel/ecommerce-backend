@@ -23,6 +23,10 @@ var userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    default: "user",
+  },
 });
 
 // The code defines a middleware function for the "save" pre-save event for a Mongoose schema. This function is executed before a document is saved to the database.

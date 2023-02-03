@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const userModel = require("../models/userModel");
+const { generateToken } = require("../config/jwtToken");
 
 // register controller
 module.exports.createUser = expressAsyncHandler(async (req, res) => {
@@ -10,7 +11,14 @@ module.exports.createUser = expressAsyncHandler(async (req, res) => {
   if (!findUser) {
     // create a new user
     const newUser = userModel.create(req.body);
-    res.json(newUser);
+    res.json({
+      _id: findUser?._id,
+      firstname: findUser?.firstname,
+      lastname: findUser.lastname,
+      email: findUser?.email,
+      mobile: findUser.email,
+      token: generateToken(findUser?._id),
+    });
   } else {
     throw new Error("User Already Exist");
   }
