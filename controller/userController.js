@@ -1,6 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const userModel = require("../models/userModel");
 
+// register controller
 module.exports.createUser = expressAsyncHandler(async (req, res) => {
   const email = req.body.email;
 
@@ -12,5 +13,17 @@ module.exports.createUser = expressAsyncHandler(async (req, res) => {
     res.json(newUser);
   } else {
     throw new Error("User Already Exist");
+  }
+});
+
+// login controller
+module.exports.loginController = expressAsyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  // check if user exists or not
+  const findUser = await userModel.findOne({ email });
+  if (findUser && (await findUser.isPasswordMatched(password))) {
+    res.json(findUser);
+  } else {
+    throw new Error("Invalid Credentials");
   }
 });
