@@ -73,3 +73,23 @@ module.exports.deleteAUser = expressAsyncHandler(async (req, res) => {
 });
 
 // updated user
+module.exports.updatedUser = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedaUser = await userModel.findByIdAndUpdate(
+      id,
+      {
+        firstname: req?.body?.firstname,
+        lastname: req?.body?.lastname,
+        email: req?.body?.email,
+        mobile: req?.body?.mobile,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updatedaUser);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
