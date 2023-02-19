@@ -14,9 +14,9 @@ module.exports.createUser = expressAsyncHandler(async (req, res) => {
     res.json({
       _id: findUser?._id,
       firstname: findUser?.firstname,
-      lastname: findUser.lastname,
+      lastname: findUser?.lastname,
       email: findUser?.email,
-      mobile: findUser.email,
+      mobile: findUser?.mobile,
       token: generateToken(findUser?._id),
     });
   } else {
@@ -33,5 +33,16 @@ module.exports.loginController = expressAsyncHandler(async (req, res) => {
     res.json(findUser);
   } else {
     throw new Error("Invalid Credentials");
+  }
+});
+
+// get all user
+
+module.exports.getallUser = expressAsyncHandler(async (req, res) => {
+  try {
+    const getUsers = await userModel.find({});
+    res.json(getUsers);
+  } catch (error) {
+    throw new Error(error);
   }
 });
