@@ -46,3 +46,28 @@ module.exports.getallUser = expressAsyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+// get a single user
+module.exports.getSingleUser = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getaUser = await userModel.findById(id);
+    res.json({
+      getaUser,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// delete a user
+module.exports.deleteAUser = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleteUser = await userModel.findByIdAndDelete(id);
+    res.json({
+      deleteUser,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
