@@ -12,12 +12,7 @@ module.exports.createUser = expressAsyncHandler(async (req, res) => {
     // create a new user
     const newUser = userModel.create(req.body);
     res.json({
-      _id: findUser?._id,
-      firstname: findUser?.firstname,
-      lastname: findUser?.lastname,
-      email: findUser?.email,
-      mobile: findUser?.mobile,
-      token: generateToken(findUser?._id),
+      newUser,
     });
   } else {
     throw new Error("User Already Exist");
@@ -30,7 +25,14 @@ module.exports.loginController = expressAsyncHandler(async (req, res) => {
   // check if user exists or not
   const findUser = await userModel.findOne({ email });
   if (findUser && (await findUser.isPasswordMatched(password))) {
-    res.json(findUser);
+    res.json({
+      _id: findUser?._id,
+      firstname: findUser?.firstname,
+      lastname: findUser?.lastname,
+      email: findUser?.email,
+      mobile: findUser?.mobile,
+      token: generateToken(findUser?._id),
+    });
   } else {
     throw new Error("Invalid Credentials");
   }
