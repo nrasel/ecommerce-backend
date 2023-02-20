@@ -7,8 +7,8 @@ module.exports.createUser = expressAsyncHandler(async (req, res) => {
   const email = req.body.email;
 
   // find user
-  const findUser = await userModel.findOne({ email });
-  if (!findUser) {
+  const findUsers = await userModel.findOne({ email });
+  if (!findUsers) {
     // create a new user
     const newUser = userModel.create(req.body);
     res.json({
@@ -22,6 +22,7 @@ module.exports.createUser = expressAsyncHandler(async (req, res) => {
 // login controller
 module.exports.loginController = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
   // check if user exists or not
   const findUser = await userModel.findOne({ email });
   if (findUser && (await findUser.isPasswordMatched(password))) {
@@ -63,6 +64,7 @@ module.exports.getSingleUser = expressAsyncHandler(async (req, res) => {
 
 // delete a user
 module.exports.deleteAUser = expressAsyncHandler(async (req, res) => {
+  console.log(req.user._id);
   const { id } = req.params;
   try {
     const deleteUser = await userModel.findByIdAndDelete(id);
@@ -76,10 +78,11 @@ module.exports.deleteAUser = expressAsyncHandler(async (req, res) => {
 
 // updated user
 module.exports.updatedUser = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  // console.log(req.user._id);
+  const { _id } = req.user;
   try {
     const updatedaUser = await userModel.findByIdAndUpdate(
-      id,
+      _id,
       {
         firstname: req?.body?.firstname,
         lastname: req?.body?.lastname,
