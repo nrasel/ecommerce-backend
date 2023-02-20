@@ -1,6 +1,6 @@
-const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
+const userModel = require("../models/userModel");
 
 const authMiddleware = asyncHandler(async (req, res, next) => {
   let token;
@@ -9,7 +9,9 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
     try {
       if (token) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(decoded);
+        const user = userModel.findById(decoded?.id);
+        req.user = user;
+        next();
       }
     } catch (error) {
       throw new Error("Not Authorized token expired, Please Login again");
