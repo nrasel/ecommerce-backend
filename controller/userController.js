@@ -119,6 +119,8 @@ module.exports.blockUser = expressAsyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+// unblock user
 module.exports.unBlockUser = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   const unblock = await userModel.findByIdAndUpdate(
