@@ -5,6 +5,8 @@ const {
   getSingleUser,
   deleteAUser,
   updatedUser,
+  blockUser,
+  unBlockUser,
 } = require("../controller/userController");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddlware");
 
@@ -16,5 +18,7 @@ router.get("/all-users", getallUser);
 router.get("/:id", authMiddleware, isAdmin, getSingleUser);
 router.delete("/:id", deleteAUser);
 router.put("/edit-user", authMiddleware, updatedUser);
+router.put("/block-user/:id", authMiddleware, isAdmin, blockUser);
+router.put("/unblock-user/:id", authMiddleware, isAdmin, unBlockUser);
 
 module.exports = router;

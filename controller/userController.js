@@ -98,3 +98,39 @@ module.exports.updatedUser = expressAsyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+// block user
+module.exports.blockUser = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const block = await userModel.findByIdAndUpdate(
+      id,
+      {
+        isBlocked: true,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json({
+      message: "User Blocked",
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+module.exports.unBlockUser = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const unblock = await userModel.findByIdAndUpdate(
+    id,
+    {
+      isBlocked: false,
+    },
+    {
+      new: true,
+    }
+  );
+  res.json({
+    message: "User UnBlocked",
+  });
+});
