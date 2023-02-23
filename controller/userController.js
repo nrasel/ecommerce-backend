@@ -115,6 +115,29 @@ module.exports.handleRefreshToken = expressAsyncHandler(async (req, res) => {
   });
 });
 
+// user logout
+module.exports.logOut = expressAsyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
+  const refreshToken = cookie.refreshToken;
+  const user = await userModel.findOne({ refreshToken });
+  if (!user) {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+    });
+    return res.sendStatus(204); // forbidden
+  }
+  await userModel.findOneAndUpdate(refreshToken, {
+    refreshToken: "",
+  });
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+  });
+  res.sendStatus(204); // forbidden
+});
+
 // updated user
 module.exports.updatedUser = expressAsyncHandler(async (req, res) => {
   // console.log(req.user._id);
