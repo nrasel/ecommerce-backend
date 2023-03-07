@@ -13,7 +13,34 @@ module.exports.createProduct = asyncHandler(async (req, res) => {
     res.json(newProduct);
   } catch (error) {
     throw new Error(error);
-    console.log(error);
+    // console.log(error);
+  }
+});
+
+// update product
+module.exports.updateProduct = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (req.body.title) {
+      req.body.slug = slugify(req.body.title);
+    }
+    const updateProduct = await productModels.findOneAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.json(updateProduct);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// delete product
+module.exports.deleteProduct = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleteProduct = await productModels.findOneAndDelete(id);
+    res.json(deleteProduct);
+  } catch (error) {
+    throw new Error(error);
   }
 });
 
