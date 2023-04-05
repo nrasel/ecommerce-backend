@@ -58,8 +58,17 @@ module.exports.getaProduct = asyncHandler(async (req, res) => {
 // get all products
 module.exports.getAllProducts = asyncHandler(async (req, res) => {
   try {
-    const findAllProducts = await productModels.find({});
-    res.json(findAllProducts);
+    // filter product using price
+    const queryObj = { ...req.query };
+    const excludFields = ["page", "sort", "limit", "fields"];
+    excludFields.forEach((el) => delete queryObj[el]);
+
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    const query = productModels.find(JSON.parse(queryStr));
+
+    const product = await query;
+    res.json(product);
   } catch (error) {
     throw new Error(error);
   }

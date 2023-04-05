@@ -201,3 +201,20 @@ module.exports.unBlockUser = expressAsyncHandler(async (req, res) => {
     message: "User UnBlocked",
   });
 });
+
+// update password
+module.exports.updatePassword = expressAsyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { password } = req.body;
+
+  validateMongodbId(_id);
+
+  const user = await userModel.findById(_id);
+  if (password) {
+    user.password = password;
+    const updatedPassword = await user.save();
+    res.json(updatedPassword);
+  } else {
+    res.json(user);
+  }
+});
